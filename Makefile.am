@@ -215,6 +215,10 @@ if ENABLE_IMKAFKA
 SUBDIRS += plugins/imkafka
 endif
 
+if ENABLE_IMFILETHROTTLEIDS
+SUBDIRS += plugins/imfilethrottleids
+endif
+
 if ENABLE_OMPROG
 SUBDIRS += plugins/omprog
 endif

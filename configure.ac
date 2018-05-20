@@ -1574,6 +1574,34 @@ if test "x$enable_imfile" = "xyes"; then
 fi
 AM_CONDITIONAL(ENABLE_IMFILE, test x$enable_imfile = xyes)
 
+# settings for the file input throttle by id module
+AC_ARG_ENABLE(imfilethrottleids,
+        [AS_HELP_STRING([--enable-imfilethrottleids],[file input module enabled @<:@default=no@:>@])],
+        [case "${enableval}" in
+         yes) enable_imfilethrottleids="yes" ;;
+          no) enable_imfilethrottleids="no" ;;
+           *) AC_MSG_ERROR(bad value ${enableval} for --enable-imfilethrottleids) ;;
+         esac],
+        [enable_imfilethrottleids=no]
+)
+if test "x$enable_imfilethrottleids" = "xyes"; then
+	AC_CHECK_FUNCS(port_create,,)
+	AC_MSG_CHECKING(for Solaris File Events Notification API support)
+	AC_TRY_COMPILE([
+		#include <port.h>
+		#include <sys/port.h>
+		], [
+		return PORT_SOURCE_FILE;
+		]
+		,
+		AC_DEFINE(HAVE_PORT_SOURCE_FILE, 1, [Enable FEN support for imfilethrottleids])
+		AC_MSG_RESULT(yes)
+		,
+		AC_MSG_RESULT(no)
+	)
+fi
+AM_CONDITIONAL(ENABLE_IMFILETHROTTLEIDS, test x$enable_imfilethrottleids = xyes)
+
 
 # settings for the door input module (under solaris, thus default off)
 AC_ARG_ENABLE(imsolaris,
@@ -2300,6 +2328,7 @@ AC_CONFIG_FILES([Makefile \
 		plugins/omruleset/Makefile \
 		plugins/omuxsock/Makefile \
 		plugins/imfile/Makefile \
+		plugins/imfilethrottleids/Makefile \
 		plugins/imsolaris/Makefile \
 		plugins/imptcp/Makefile \
 		plugins/impstats/Makefile \
@@ -2380,6 +2409,7 @@ echo "    /dev/kmsg functionality enabled:          $enable_kmsg"
 echo "    plain tcp input module enabled:           $enable_imptcp"
 echo "    imdiag enabled:                           $enable_imdiag"
 echo "    file input module enabled:                $enable_imfile"
+echo "    file throttle id input module enabled:    $enable_imfilethrottleids"
 echo "    Solaris input module enabled:             $enable_imsolaris"
 echo "    periodic statistics module enabled:       $enable_impstats"
 echo "    imzmq3 input module enabled:              $enable_imzmq3"
