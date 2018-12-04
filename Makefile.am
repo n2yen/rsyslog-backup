@@ -191,6 +191,10 @@ if ENABLE_IMFILE
 SUBDIRS += plugins/imfile
 endif
 
+if ENABLE_IMDOCKER
+SUBDIRS += plugins/imdocker
+endif
+
 if ENABLE_IMPTCP
 SUBDIRS += plugins/imptcp
 endif
@@ -479,6 +483,10 @@ endif
 
 if ENABLE_IMFILE
 DISTCHECK_CONFIGURE_FLAGS+= --enable-imfile
+endif
+
+if ENABLE_IMDOCKER
+DISTCHECK_CONFIGURE_FLAGS+= --enable-docker
 endif
 
 if ENABLE_DISTCHECK_WORKAROUND
